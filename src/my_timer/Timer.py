@@ -21,7 +21,7 @@ class Timer:
 
     def progress(self) -> float:
         """ The progress made compared to the duration in % """
-        return self.elapsed * 100.0 / self._duration
+        return self.elapsed() * 100.0 / self._duration
 
     def resume(self) -> float:
         """ Resumes the timer """
