@@ -31,7 +31,7 @@ class Timer:
         paused_time = monotonic() - self._paused_instant
         self._paused_time += paused_time
 
-    def elapsed(self) -> tuple[float, float]:
+    def elapsed(self) -> float:
         """ Time passed since the start point """
         if not self._start:
             raise RuntimeError("timer has not been started")
