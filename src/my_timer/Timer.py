@@ -41,3 +41,7 @@ class Timer:
     def paused_time(self):
         """ Returns total paused time """
         return self._paused_time
+
+    def __str__(self):
+        """ Duration in hours """
+        return f"{self._duration // 3600}h"
