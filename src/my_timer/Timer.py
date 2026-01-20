@@ -1,4 +1,5 @@
 from time import monotonic
+from .TimeFormat import TimeFormat
 
 class Timer:
     """ API to Handle time functions """
@@ -6,8 +7,9 @@ class Timer:
         self._start = None
         self._paused_instant = None
         self._paused_time = 0.0
-        self._duration = duration
+        self._duration = TimeFormat.parse(duration) 
         self._running = False
+        self.progress = 0.0
 
     def start(self) -> None:
         """ Starts the timer """
@@ -19,9 +21,10 @@ class Timer:
         self._running = False
         self._paused_instant = monotonic()
 
-    def progress(self) -> float:
+    def progress(self, time_passed) -> float:
         """ The progress made compared to the duration in % """
-        return self.elapsed() * 100.0 / self._duration
+        self._progress = time_passed * 100.0 / self._duration
+        return self.progress
 
     def resume(self) -> float:
         """ Resumes the timer """
@@ -36,6 +39,7 @@ class Timer:
         if not self._start:
             raise RuntimeError("timer has not been started")
         time_passed = monotonic() - self._start - self._paused_time
+        self.progress(time_passed)
         return time_passed
     
     def paused_time(self):
