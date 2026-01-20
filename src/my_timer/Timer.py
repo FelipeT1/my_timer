@@ -1,6 +1,6 @@
 from time import monotonic
 from .TimeFormat import TimeFormat
-from .TimerState import TimerStates
+from .TimerState import TimerState
 
 class Timer:
     """ API to Handle time functions """
