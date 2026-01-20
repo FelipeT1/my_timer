@@ -22,10 +22,9 @@ class Timer:
         self._state = TimerState.PAUSED
         self._paused_instant = monotonic()
 
-    def progress(self, time_passed) -> float:
+    def progress(self, time_passed) -> None:
         """ The progress made compared to the duration in % """
         self._progress = time_passed * 100.0 / self._duration
-        return self.progress
 
     def resume(self) -> float:
         """ Resumes the timer """
