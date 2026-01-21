@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import Enum, auto
 
-class TimerState:
-    RUNNING = 1
-    PAUSED = 2
-    STOPPED = 3
-    FINISHED = 4
+class TimerState(Enum):
+    RUNNING = auto()
+    PAUSED = auto()
+    STOPPED = auto()
+    FINISHED = auto()
