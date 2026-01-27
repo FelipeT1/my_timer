@@ -1,5 +1,4 @@
 from time import monotonic
-from .TimeFormat import TimeFormat
 from .TimerState import TimerState
 
 class Timer:
@@ -8,27 +7,35 @@ class Timer:
         self._start = None
         self._paused_instant = None
         self._paused_time = 0.0
-        self._duration = TimeFormat.parse(duration) 
-        self._state = TimerState()
-        self.progress = 0.0
+        self._duration = duration 
+        self._state = TimerState.STOPPED
+        self._progress = 0.0
 
     def start(self) -> None:
         """ Starts the timer """
+        if self._state != TimerState.STOPPED:
+            return
         self._start = monotonic()
-        self._running = True
+        self._state = TimerState.RUNNING
 
     def pause(self) -> None:
         """ Pauses the timer """
+        if self._state != TimerState.RUNNING:
+            return 
         self._state = TimerState.PAUSED
         self._paused_instant = monotonic()
 
-    def progress(self, time_passed) -> None:
-        """ The progress made compared to the duration in % """
-        self._progress = time_passed * 100.0 / self._duration
+    def stop(self) -> None:
+        """ Stops the timer """
+        self._state = TimerState.STOPPED
+
+    def progress(self) -> float:
+        """ The progress made compared to the duration """
+        return min(self.elapsed() * 100.0 / self._duration, 100.0)
 
     def resume(self) -> float:
         """ Resumes the timer """
-        if self._state != TimerState.RUNNING:
+        if self._state != TimerState.PAUSED:
             return 
         self._state = TimerState.RUNNING
         paused_time = monotonic() - self._paused_instant
@@ -39,13 +46,25 @@ class Timer:
         if not self._start:
             raise RuntimeError("timer has not been started")
         time_passed = monotonic() - self._start - self._paused_time
-        self.progress(time_passed)
         return time_passed
+
+    def update(self) -> None:
+        """ Register the progress made """
+        if self._state != TimerState.RUNNING:
+            return 
+        time_passed = self.elapsed() 
+        self._progress = min(time_passed * 100.0 / self._duration, 100.0)
+        if self.is_finished():
+            self._state = TimerState.FINISHED
     
-    def paused_time(self):
+    def is_finished(self) -> bool:
+        """ Verify if the time passed is enough to end the timer """
+        return self.progress() == 100.0
+        
+    def paused_time(self) -> float:
         """ Returns total paused time """
         return self._paused_time
 
-    def __str__(self):
+    def __str__(self) -> str:
         """ Duration in hours """
         return f"{self._duration // 3600}h"
