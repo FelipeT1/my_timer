@@ -5,7 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cool-cli-timer"
 version = "0.0.1"
+authors = [
+  {name = "Felipe Teixeira", email = "felipeteixeira2023@gmail.com"},
+  ]
+readme="README.md"
+description = "A simple CLI timer for tasks in pomodoro style"
+keywords= ["timer", "pomodoro", "study"]
+license = "MIT"
 
-[tool.setuptools.packages.find]
-# All the following settings are optional:
-where = ["src"]  # ["."] by default
+[project.urls]
+Repository = "https://github.com/FelipeT1/my_timer"
+

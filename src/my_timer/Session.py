@@ -1,4 +1,4 @@
-from Timer import Timer
+from .Timer import Timer
 
 class Session:
     """ """
