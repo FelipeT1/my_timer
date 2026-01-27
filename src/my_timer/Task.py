@@ -1,4 +1,3 @@
-from time import sleep
 from .Timer import Timer
 from .TimeFormat import TimeFormat
 from .TaskState import TaskState
@@ -71,10 +70,10 @@ class Task:
     def update(self) -> None:
         """ Updates the task phase """
         if self.is_finished():
-            if self._state == TaskPhase.FOCUS:
-                self._state = TaskPhase.REST
+            if self._state == TaskState.FOCUS:
+                self._state = TaskState.REST
             else:
-                self._state = TaskPhase.FINISHED
+                self._state = TaskState.FINISHED
 
     def __str__(self) -> str:
         if self._state == TaskState.FOCUS:
