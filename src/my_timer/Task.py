@@ -60,7 +60,7 @@ class Task:
             return self._rest.elapsed()
 
     def is_finished(self) -> bool:
-        """ Verify is the timer is finished """
+        """ Verify if the timer is finished """
         if self._state == TaskState.FOCUS:
             return self._focus.is_finished()
 
