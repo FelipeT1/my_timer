@@ -64,7 +64,12 @@ class Pomodoro:
             if state.name == "REST":
                 self.task.start()
             elif state.name == "FINISHED": 
-                self._set_task()
+                try:
+                    self._set_task()
+                except StopIteration:
+                    break
+                else:
+                    self.task.start()
             sleep(1)
 
     # TODO: Serialize
