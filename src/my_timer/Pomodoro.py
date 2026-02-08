@@ -1,3 +1,4 @@
+from time import sleep
 from datetime import date
 from threading import Thread
 from .Task import Task
@@ -10,30 +11,34 @@ class Pomodoro:
        self._tasks = iter(tasks)
        self._date = date.today().isoformat()
        self._input_thread = Thread(target=self._events)
-       self._listener_thread = Thread(target=self._listener)
 
-       # Sound
+       # TODO: has a progress bar
+
+       # TODO: has a soundplayer
        #self._soundplayer = SoundPlayer()
 
        # Events
        self._pause = Event()
        self._stop = Event()
        self._resume = Event()
-
-    def _set_task(self) -> Task:
+       self._task_phase_change = Event()
+    
+    def _set_task(self) -> None:
         """ Sets the next task to be worked on """
-        return next(self._tasks)
+        self.task = next(self._tasks)
+        self.task.start()
 
     def _events(self) -> None:
         """ Get user input and signals the corresponding event """
-        e = input("p(pause) s(stop) r(resume): ").lower()
-        match e:
-            case e == "p":
-                self._pause.set()
-            case e == "r":
-                self._resume.set()
-            case e == "s":
-                self._stop.set()
+        while not self._stop.is_set():
+            e = input("p(pause) stop(stop) r(resume): ").lower()
+            match e:
+                case "p":
+                    self._pause.set()
+                case "r":
+                    self._resume.set()
+                case "stop":
+                    self._stop.set()
 
     def _listener(self) -> None:
         """ Listen to events and executes the appropiate action """
@@ -45,11 +50,21 @@ class Pomodoro:
             self.task.resume()
             self._resume.clear()
 
+        elif self._stop.is_set():
+            self.task.stop()
+            self._stop.clear()
+
     def run(self) -> None:
         """ Main thread for the pomodoro """
         self._set_task()
         self._input_thread.start()
-        self._listener_thread.start() 
+        while not self._stop_is_set():
+            self._listener()
+            state = self.task.update()
+            if state.name == "REST":
+                self.task.start()
+            elif state.name == "FINISHED": 
+                self._set_task()
+            sleep(1)
 
-        while self._stop.is_set():
-            pass
+    # TODO: Serialize
