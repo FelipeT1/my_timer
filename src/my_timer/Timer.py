@@ -59,7 +59,7 @@ class Timer:
     
     def is_finished(self) -> bool:
         """ Verify if the time passed is enough to end the timer """
-        return self.progress() == 100.0
+        return self.progress() == 100.0 or self._state == TimerState.STOPPED
         
     def paused_time(self) -> float:
         """ Returns total paused time """
