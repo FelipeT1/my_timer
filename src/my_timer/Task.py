@@ -67,13 +67,15 @@ class Task:
         elif self._state == TaskState.REST: 
             return self._rest.is_finished()
 
-    def update(self) -> None:
+    def update(self) -> TaskState:
         """ Updates the task phase """
         if self.is_finished():
             if self._state == TaskState.FOCUS:
                 self._state = TaskState.REST
+                return TaskState.REST
             else:
                 self._state = TaskState.FINISHED
+                return TaskState.FINISHED
 
     def __str__(self) -> str:
         if self._state == TaskState.FOCUS:
