@@ -33,7 +33,7 @@ class Timer:
         """ The progress made compared to the duration """
         return min(self.elapsed() * 100.0 / self._duration, 100.0)
 
-    def resume(self) -> float:
+    def resume(self) -> None:
         """ Resumes the timer """
         if self._state != TimerState.PAUSED:
             return 
