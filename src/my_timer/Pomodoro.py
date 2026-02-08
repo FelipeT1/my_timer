@@ -1,6 +1,6 @@
 from time import sleep
 from datetime import date
-from threading import Thread
+from threading import Thread, Event
 from .Task import Task
 from .SoundPlayer import SoundPlayer
 
@@ -58,7 +58,7 @@ class Pomodoro:
         """ Main thread for the pomodoro """
         self._set_task()
         self._input_thread.start()
-        while not self._stop_is_set():
+        while not self.stop_is_set():
             self._listener()
             state = self.task.update()
             if state.name == "REST":
