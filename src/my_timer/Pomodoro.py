@@ -31,7 +31,10 @@ class Pomodoro:
     def _events(self) -> None:
         """ Get user input and signals the corresponding event """
         while not self._stop.is_set():
-            e = input("p(pause) stop(stop) r(resume): ").lower()
+            e = input("p(pause) stop(stop) r(resume): ").strip().lower()
+            if e not in ["p", "r", "stop"]:
+                print("Invalid input. Try again.")
+                continue
             match e:
                 case "p":
                     self._pause.set()
@@ -58,9 +61,10 @@ class Pomodoro:
         """ Main thread for the pomodoro """
         self._set_task()
         self._input_thread.start()
-        while not self.stop_is_set():
+        while not self._stop.is_set():
             self._listener()
             state = self.task.update()
+            print(f"{self.task}")
             if state.name == "REST":
                 self.task.start()
             elif state.name == "FINISHED": 
