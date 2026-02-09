@@ -67,6 +67,14 @@ class Task:
         elif self._state == TaskState.REST: 
             return self._rest.is_finished()
 
+    def timer_state(self) -> bool:
+        """ Get the timer state """
+        if self._state == TaskState.FOCUS:
+            return self._focus.current_state()
+
+        elif self._state == TaskState.REST: 
+            return self._rest.current_state()
+
     def update(self) -> TaskState:
         """ Updates the task phase """
         if self.is_finished():
@@ -79,7 +87,7 @@ class Task:
 
     def __str__(self) -> str:
         if self._state == TaskState.FOCUS:
-            return f"Task: {self._name} | Duration:{self._focus} | Progress: {self.progress():.2f}}"
+            return f"Task: {self._name} | Duration:{self._focus} | Timer: {self.timer_state()} Progress: {self.progress():.2f}}"
 
         elif self._state == TaskState.REST: 
-            return f"Task: {self._name} | Duration:{self._focus} | Progress: {self.progress():.2f}}"
+            return f"Task: {self._name} | Duration:{self._focus} | Timer: {self.timer_state()} Progress: {self.progress():.2f}}"
