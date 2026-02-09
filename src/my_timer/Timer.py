@@ -44,7 +44,7 @@ class Timer:
     def elapsed(self) -> float:
         """ Time passed since the start point """
         if self._state == TimerState.STOPPED:
-            raise RuntimeError("timer is stopped")
+            raise RuntimeError("timer was stopped")
         time_passed = monotonic() - self._start - self._paused_time
         return time_passed
 
