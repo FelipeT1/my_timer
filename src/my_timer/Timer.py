@@ -65,6 +65,10 @@ class Timer:
         """ Returns total paused time """
         return self._paused_time
 
+    def current_state(self) -> str:
+        """ The current timer state """
+        return self._state.name
+
     def __str__(self) -> str:
         """ Duration in hours """
         return f"{self._duration // 3600}h"
