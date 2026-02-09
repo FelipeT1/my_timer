@@ -70,10 +70,9 @@ class Pomodoro:
             elif state.name == "FINISHED": 
                 try:
                     self._set_task()
+                    self.task.start()
                 except StopIteration:
                     break
-                else:
-                    self.task.start()
             sleep(1)
 
     # TODO: Serialize
