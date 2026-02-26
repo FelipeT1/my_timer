@@ -38,7 +38,7 @@ class TestTimer:
         timer = Timer(100.0)
         timer.start()
         t = 105.0
-        assert timer.elapsed() == 5.0
+        assert timer._elapsed() == 5.0
     
     def test_elapsed_with_pause(self, monkeypatch):
         t = 100.0
@@ -52,7 +52,7 @@ class TestTimer:
         timer.resume()
         # 5s de pausa -> 110
         t = 110.0
-        assert timer.elapsed() == 5.0
+        assert timer._elapsed() == 5.0
     
     def test_paused_time(self, monkeypatch):
         t = 100.0
