@@ -21,12 +21,14 @@ class Pomodoro:
        self._pause = Event()
        self._stop = Event()
        self._resume = Event()
-       self._task_phase_change = Event()
     
     def _set_task(self) -> None:
         """ Sets the next task to be worked on """
-        self.task = next(self._tasks)
-        self.task.start()
+        try:
+            self.task = next(self._tasks)
+            self.task.start()
+        except StopIteration as e:
+            self._stop.set()
 
     def _events(self) -> None:
         """ Get user input and signals the corresponding event """
@@ -64,15 +66,12 @@ class Pomodoro:
         while not self._stop.is_set():
             self._listener()
             state = self.task.update()
-            print(f"{self.task}")
+            print()
+            print(self.task)
             if state.name == "REST":
                 self.task.start()
-            elif state.name == "FINISHED": 
-                try:
-                    self._set_task()
-                    self.task.start()
-                except StopIteration:
-                    break
+            if state.name == "FINISHED": 
+                self._set_task()
             sleep(1)
 
     # TODO: Serialize
