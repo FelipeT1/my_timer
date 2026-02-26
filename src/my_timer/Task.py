@@ -43,14 +43,6 @@ class Task:
         elif self._state == TaskState.REST: 
             self._rest.resume()
 
-    def progress(self) -> float:
-        """ Returns the timer's progress for this task """
-        if self._state == TaskState.FOCUS:
-            return self._focus.progress()
-
-        elif self._state == TaskState.REST: 
-            return self._rest.progress()
-
     def elapsed(self) -> float:
         """ Time passed since the start """
         if self._state == TaskState.FOCUS:
@@ -62,9 +54,11 @@ class Task:
     def is_finished(self) -> bool:
         """ Verify if the timer is finished """
         if self._state == TaskState.FOCUS:
+            self._focus.update()
             return self._focus.is_finished()
 
         elif self._state == TaskState.REST: 
+            self._rest.update()
             return self._rest.is_finished()
 
     def timer_state(self) -> bool:
@@ -72,7 +66,7 @@ class Task:
         if self._state == TaskState.FOCUS:
             return self._focus.current_state()
 
-        elif self._state == TaskState.REST: 
+        else:
             return self._rest.current_state()
 
     def update(self) -> TaskState:
@@ -80,14 +74,13 @@ class Task:
         if self.is_finished():
             if self._state == TaskState.FOCUS:
                 self._state = TaskState.REST
-                return TaskState.REST
             else:
                 self._state = TaskState.FINISHED
-                return TaskState.FINISHED
+        return self._state
 
     def __str__(self) -> str:
         if self._state == TaskState.FOCUS:
-            return f"Task: {self._name} | Duration:{self._focus} | Timer: {self.timer_state()} Progress: {self.progress():.2f}"
+            return f"Task: {self._name} | Duration:{self._focus} | Timer: {self.timer_state()}"
 
-        elif self._state == TaskState.REST: 
-            return f"Task: {self._name} | Duration:{self._focus} | Timer: {self.timer_state()} Progress: {self.progress():.2f}"
+        else:
+            return f"Task: {self._name} | Duration:{self._rest} | Timer: {self.timer_state()}"
