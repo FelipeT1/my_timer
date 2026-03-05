@@ -1,3 +1,4 @@
+import os 
 from time import sleep
 from datetime import date
 from threading import Thread, Event
@@ -10,7 +11,10 @@ class Pomodoro:
        self.task = None
        self._tasks = iter(tasks)
        self._date = date.today().isoformat()
-       self._input_thread = Thread(target=self._events)
+       self._input_thread = Thread(target=self._events, daemon=True)
+
+       # OS
+       self._os = 'unix'
 
        # TODO: has a progress bar
 
@@ -33,7 +37,7 @@ class Pomodoro:
     def _events(self) -> None:
         """ Get user input and signals the corresponding event """
         while not self._stop.is_set():
-            e = input("p(pause) stop(stop) r(resume): ").strip().lower()
+            e = input().strip().lower()
             if e not in ["p", "r", "stop"]:
                 print("Invalid input. Try again.")
                 continue
@@ -66,8 +70,9 @@ class Pomodoro:
         while not self._stop.is_set():
             self._listener()
             state = self.task.update()
-            print()
-            print(self.task)
+            os.system('clear')
+            print(self.task, flush=True)
+            print("p(pause) stop(stop) r(resume):",end=' ', flush=True)
             if state.name == "REST":
                 self.task.start()
             if state.name == "FINISHED": 

@@ -20,8 +20,10 @@ def create_pomodoro() -> Pomodoro:
             except ValueError as e:
                 print("Something went wrong. Try time format 00h00m00s")
                 continue
-        else:
+        elif choice in ['n', 'no']:
             break
+        else:
+            continue
     return Pomodoro(tasks)
 
 if __name__ == "__main__":
