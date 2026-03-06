@@ -80,7 +80,7 @@ class Task:
 
     def __str__(self) -> str:
         if self._state == TaskState.FOCUS:
-            return f"Task: {self._name} | Duration:{self._focus} | Timer: {self.timer_state()}"
+            return f"Task: {self._name} - FOCUS | Timer: {self.timer_state()}\n{self._focus.progress_bar()}"
 
         else:
-            return f"Task: {self._name} | Duration:{self._rest} | Timer: {self.timer_state()}"
+            return f"Task: {self._name} - REST | Timer: {self.timer_state()}\n{self._rest.progress_bar()}"

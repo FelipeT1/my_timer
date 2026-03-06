@@ -1,5 +1,7 @@
+import math
 from time import monotonic
 from .TimerState import TimerState
+from shutil import get_terminal_size
 
 class Timer:
     """ API to Handle time functions """
@@ -47,6 +49,13 @@ class Timer:
         time_passed = self._elapsed() 
         self._progress = min(time_passed * 100.0 / self._duration, 100.0)
         return self._progress
+
+    def progress_bar(self) -> str:
+        # Window size
+        # returns a string of '#' based on the progress made
+        width, height = get_terminal_size()
+        n = math.floor(((width * 1/4) * self._progress) / 100)
+        return n * '#'
 
     def is_finished(self) -> bool:
         """ Verify if the time passed is enough to end the timer """
