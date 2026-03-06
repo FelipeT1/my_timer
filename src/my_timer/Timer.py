@@ -51,8 +51,10 @@ class Timer:
         return self._progress
 
     def progress_bar(self) -> str:
+        """ The progress bar based on the timer progress"""
         # Window size
         # returns a string of '#' based on the progress made
+        # It uses 25% of the width
         width, height = get_terminal_size()
         n = math.floor(((width * 1/4) * self._progress) / 100)
         return n * '#'
