@@ -11,45 +11,31 @@ class Task:
         self._rest = Timer(TimeFormat.parse(rest_time))
         self._state = TaskState.FOCUS
 
+    def _current_timer(self) -> Timer:
+        """ Returns the timer being used by the task """
+        if self._state == TaskState.FOCUS:
+            return self._focus
+        return self._rest
+
     def start(self) -> None:
         """ Starts the timer for the current task """
-        if self._state == TaskState.FOCUS:
-            self._focus.start()
-
-        elif self._state == TaskState.REST: 
-            self._rest.start()
+        self._current_timer().start()
 
     def pause(self) -> None:
         """ Pauses the timer for the current task """
-        if self._state == TaskState.FOCUS:
-            self._focus.pause()
-
-        elif self._state == TaskState.REST: 
-            self._rest.pause()
+        self._current_timer().pause()
     
     def stop(self) -> None:
         """ Stops the timer and returns the current progress """
-        if self._state == TaskState.FOCUS:
-            self._focus.stop()
-
-        elif self._state == TaskState.REST: 
-            self._rest.stop()
+        self._current_timer().stop()
 
     def resume(self) -> None:
         """ Resumes a paused timer """
-        if self._state == TaskState.FOCUS:
-            self._focus.resume()
-
-        elif self._state == TaskState.REST: 
-            self._rest.resume()
+        self._current_timer().resume()
 
     def elapsed(self) -> float:
         """ Time passed since the start """
-        if self._state == TaskState.FOCUS:
-            return self._focus.elapsed()
-
-        elif self._state == TaskState.REST: 
-            return self._rest.elapsed()
+        self._current_timer().elapsed()
 
     def is_finished(self) -> bool:
         """ Verify if the timer is finished """
@@ -63,11 +49,7 @@ class Task:
 
     def timer_state(self) -> bool:
         """ Get the timer state """
-        if self._state == TaskState.FOCUS:
-            return self._focus.current_state()
-
-        else:
-            return self._rest.current_state()
+        self._current_timer().current_state()
 
     def update(self) -> TaskState:
         """ Updates the task phase """
@@ -79,8 +61,4 @@ class Task:
         return self._state
 
     def __str__(self) -> str:
-        if self._state == TaskState.FOCUS:
-            return f"Task: {self._name} - FOCUS | Timer: {self.timer_state()}\n{self._focus.progress_bar()}"
-
-        else:
-            return f"Task: {self._name} - REST | Timer: {self.timer_state()}\n{self._rest.progress_bar()}"
+        return f"Task: {self._name} - {self._state.name} | Timer: {self._current_timer().timer_state()}\n{self._current_timer().progress_bar()}"
